@@ -1,6 +1,6 @@
 # pati_nature
 
-A new Flutter project.
+UI Pati Nature Using Flutter
 
 ## Getting Started
 
