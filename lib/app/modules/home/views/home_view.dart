@@ -6,13 +6,17 @@ import 'package:pati_nature/app/modules/home/models/category_models.dart';
 import 'package:pati_nature/app/modules/home/models/location_models.dart';
 import 'package:pati_nature/app/modules/home/models/recommended_models.dart';
 import 'package:pati_nature/app/modules/home/widget/searchDelegata.dart';
+import 'package:pati_nature/app/routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     RxBool menuOpen = false.obs;
-    RxDouble tranx = 0.0.obs, trany = 0.0.obs, scale = 1.0.obs;
+    RxDouble tranx = 0.0.obs,
+        trany = 0.0.obs,
+        scale = 1.0.obs,
+        radius = 0.0.obs;
     return Scaffold(
       body: Stack(
         children: [
@@ -29,16 +33,24 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   ListTile(
                     title: Text(
-                      "Pati \nNature",
+                      "Hi, Everyone",
                       strutStyle: StrutStyle(),
                       style: GoogleFonts.openSans(
-                          fontSize: 40,
+                          fontSize: 20,
                           color: Colors.white,
-                          fontWeight: FontWeight.w700),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  ListTile(
+                    leading: Icon(Icons.favorite, color: Colors.white),
+                    title: Text("Favorite",
+                        style: GoogleFonts.openSans(color: Colors.white)),
+                    onTap: () {
+                      print("favorite");
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.star, color: Colors.white),
@@ -71,7 +83,7 @@ class HomeView extends GetView<HomeController> {
           Obx(
             () => AnimatedContainer(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(radius.value),
                 color: Colors.grey.shade100,
                 boxShadow: [
                   BoxShadow(
@@ -100,12 +112,14 @@ class HomeView extends GetView<HomeController> {
                                 scale.value = 0.8;
                                 tranx.value = 200;
                                 trany.value = 100;
+                                radius.value = 20;
                                 menuOpen.value = true;
                                 print(scale);
                               } else {
                                 scale.value = 1;
                                 tranx.value = 0;
                                 trany.value = 0;
+                                radius.value = 0;
                                 menuOpen.value = false;
                                 print(scale);
                               }
@@ -207,60 +221,72 @@ class HomeView extends GetView<HomeController> {
                         itemCount: recomendedData.length,
                         physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return Container(
-                            height: 200,
-                            width: 300,
-                            margin: EdgeInsets.only(right: 15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.grey,
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "${recomended[index].gambar.toString()}",
+                          return GestureDetector(
+                            onTap: () {
+                              if (menuOpen == true) {
+                                scale.value = 1;
+                                tranx.value = 0;
+                                trany.value = 0;
+                                radius.value = 0;
+                                menuOpen.value = false;
+                              }
+                              Get.toNamed(Routes.DESTINATION);
+                            },
+                            child: Container(
+                              height: 200,
+                              width: 300,
+                              margin: EdgeInsets.only(right: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey,
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    "${recomended[index].gambar.toString()}",
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
-                                fit: BoxFit.cover,
                               ),
-                            ),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        Colors.black.withOpacity(0.8),
-                                        Colors.transparent,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          Colors.black.withOpacity(0.8),
+                                          Colors.transparent,
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 15,
+                                    left: 15,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on,
+                                          color: Colors.red,
+                                          size: 19,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          "${recomended[index].lokasi}",
+                                          style: GoogleFonts.openSans(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ),
-                                Positioned(
-                                  bottom: 15,
-                                  left: 15,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        color: Colors.red,
-                                        size: 19,
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        "${recomended[index].lokasi}",
-                                        style: GoogleFonts.openSans(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -324,55 +350,67 @@ class HomeView extends GetView<HomeController> {
                         shrinkWrap: true,
                         physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return Container(
-                            height: 220,
-                            margin: EdgeInsets.only(bottom: 15),
-                            alignment: Alignment.bottomCenter,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    "${lokasi[index].gambar.toString()}"),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 5,
-                                  offset: Offset(3, 4),
-                                ),
-                              ],
-                            ),
+                          return GestureDetector(
+                            onTap: () {
+                              if (menuOpen == true) {
+                                scale.value = 1;
+                                tranx.value = 0;
+                                trany.value = 0;
+                                radius.value = 0;
+                                menuOpen.value = false;
+                              }
+                              Get.toNamed(Routes.DESTINATION);
+                            },
                             child: Container(
-                              height: 50,
-                              padding: EdgeInsets.only(left: 20),
-                              alignment: Alignment.centerLeft,
+                              height: 220,
+                              margin: EdgeInsets.only(bottom: 15),
+                              alignment: Alignment.bottomCenter,
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      "${lokasi[index].gambar.toString()}"),
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color: Colors.red,
-                                    size: 19,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "${lokasi[index].lokasi}",
-                                    style: GoogleFonts.openSans(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 5,
+                                    offset: Offset(3, 4),
                                   ),
                                 ],
+                              ),
+                              child: Container(
+                                height: 50,
+                                padding: EdgeInsets.only(left: 20),
+                                alignment: Alignment.centerLeft,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(15),
+                                    bottomRight: Radius.circular(15),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.red,
+                                      size: 19,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "${lokasi[index].lokasi}",
+                                      style: GoogleFonts.openSans(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );

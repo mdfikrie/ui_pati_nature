@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class DestinationController extends GetxController {
-  //TODO: Implement DestinationController
+  RxBool favorite = false.obs;
 
   final count = 0.obs;
   @override

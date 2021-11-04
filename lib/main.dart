@@ -8,7 +8,7 @@ void main() {
   runApp(
     GetMaterialApp(
       title: "Pati Nature",
-      initialRoute: AppPages.INITIAL,
+      initialRoute: Routes.HOME,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
     ),
