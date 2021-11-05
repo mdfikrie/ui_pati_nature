@@ -1,3 +1,3 @@
 # pati_nature
 
-UI Pati pature ini du buatt menggunakan Flutter
+UI Pati Nature ini du buatt menggunakan Flutter
